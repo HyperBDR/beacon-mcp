@@ -146,3 +146,38 @@ describe("BeaconClient retry", () => {
     expect(res.code).toBe(0);
   });
 });
+
+describe("BeaconClient proxy option", () => {
+  it("accepts a proxy option without breaking normal requests", async () => {
+    // We don't have a proxy server in tests; what we verify is that
+    // constructing with `proxy` and then issuing a request still works
+    // end-to-end through the underlying $Fetch.
+    server.use(
+      http.get(`${BASE}/api/v1/orgs`, () =>
+        HttpResponse.json({ code: 0, message: "ok", data: [] }),
+      ),
+    );
+    const c = new BeaconClient({
+      baseUrl: BASE,
+      defaultOrg: "default",
+      timeoutMs: 5_000,
+      proxy: "http://proxy.corp.local:8080",
+    });
+    const res = await c.listOrgs();
+    expect(res.code).toBe(0);
+    // In a unit test we cannot confirm ofetch actually uses the proxy
+    // (it would only matter for the real network), but the constructor
+    // and the request flow must both succeed.
+  });
+
+  it("accepts socks5:// schemes", async () => {
+    const c = new BeaconClient({
+      baseUrl: BASE,
+      defaultOrg: "default",
+      timeoutMs: 5_000,
+      proxy: "socks5://user:pass@tor-exit:9050",
+    });
+    // No request; just ensure the constructor accepts the value.
+    expect(c).toBeDefined();
+  });
+});

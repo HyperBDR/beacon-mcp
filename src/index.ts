@@ -26,6 +26,7 @@ async function main(): Promise<void> {
     defaultOrg: cfg.BEACON_ORG,
     timeoutMs: cfg.BEACON_TIMEOUT_MS,
     apiKey: cfg.BEACON_API_KEY,
+    proxy: cfg.BEACON_PROXY,
   });
 
   const server = buildServer(client);

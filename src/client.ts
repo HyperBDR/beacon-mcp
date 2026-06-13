@@ -34,6 +34,8 @@ export interface BeaconClientOptions {
   defaultOrg: string;
   timeoutMs: number;
   apiKey?: string;
+  /** Optional HTTP proxy used for requests to `baseUrl`. */
+  proxy?: string;
   /** Optional fetch implementation (defaults to ofetch with global fetch). Mainly for tests. */
   fetcher?: $Fetch;
 }
@@ -49,12 +51,14 @@ export class BeaconClient {
   private readonly defaultOrg: string;
   private readonly defaultTimeout: number;
   private readonly apiKey?: string;
+  private readonly proxy?: string;
 
   constructor(opts: BeaconClientOptions) {
     this.baseUrl = opts.baseUrl.replace(/\/+$/, "");
     this.defaultOrg = opts.defaultOrg;
     this.defaultTimeout = opts.timeoutMs;
     this.apiKey = opts.apiKey;
+    this.proxy = opts.proxy;
     this.fetch =
       opts.fetcher ??
       ofetch.create({
@@ -63,6 +67,7 @@ export class BeaconClient {
         retryStatusCodes: [408, 429, 500, 502, 503, 504],
         timeout: opts.timeoutMs,
         headers: this.authHeaders(),
+        ...(this.proxy ? { proxy: this.proxy } : {}),
         onResponseError({ response }) {
           void response;
         },

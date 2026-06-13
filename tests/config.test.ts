@@ -44,3 +44,33 @@ describe("parseCli", () => {
     expect(opts.host).toBe("0.0.0.0");
   });
 });
+
+describe("loadConfig BEACON_PROXY", () => {
+  it("accepts empty/undefined BEACON_PROXY", () => {
+    const cfg = loadConfig({});
+    expect(cfg.BEACON_PROXY).toBeUndefined();
+  });
+
+  it("accepts an http:// proxy URL", () => {
+    const cfg = loadConfig({ BEACON_PROXY: "http://proxy.corp.local:8080" });
+    expect(cfg.BEACON_PROXY).toBe("http://proxy.corp.local:8080");
+  });
+
+  it("accepts an https:// proxy URL", () => {
+    const cfg = loadConfig({ BEACON_PROXY: "https://internal-proxy:8443" });
+    expect(cfg.BEACON_PROXY).toBe("https://internal-proxy:8443");
+  });
+
+  it("accepts a socks5:// proxy URL", () => {
+    const cfg = loadConfig({ BEACON_PROXY: "socks5://user:pass@tor:9050" });
+    expect(cfg.BEACON_PROXY).toBe("socks5://user:pass@tor:9050");
+  });
+
+  it("rejects an unsupported scheme", () => {
+    expect(() => loadConfig({ BEACON_PROXY: "ftp://x" })).toThrow(/Invalid environment/);
+  });
+
+  it("rejects a malformed value", () => {
+    expect(() => loadConfig({ BEACON_PROXY: "not a url" })).toThrow(/Invalid environment/);
+  });
+});

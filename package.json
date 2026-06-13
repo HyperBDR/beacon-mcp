@@ -1,7 +1,7 @@
 {
   "name": "@beacon/mcp-server",
   "version": "0.1.0",
-  "description": "MCP server for the beacon log analytics platform — exposes the beacon REST API as MCP tools/resources so AI agents can query and analyze AI assistant usage data.",
+  "description": "MCP server for the beacon log analytics platform \u2014 exposes the beacon REST API as MCP tools/resources so AI agents can query and analyze AI assistant usage data.",
   "type": "module",
   "license": "MIT",
   "engines": {
@@ -12,7 +12,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -21,7 +22,8 @@
     "dev:http": "tsx src/index.ts --http",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepare": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
@@ -41,5 +43,13 @@
     "beacon",
     "ai-agent",
     "analytics"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HyperBDR/beacon-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HyperBDR/beacon-mcp/issues"
+  },
+  "homepage": "https://github.com/HyperBDR/beacon-mcp#readme"
 }

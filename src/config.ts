@@ -1,10 +1,24 @@
 import { z } from "zod";
 
+/**
+ * Validate a proxy URL. Accepts http://, https://, socks://, socks5://.
+ * Empty/undefined is OK (no proxy = direct connection).
+ */
+const ProxyUrl = z
+  .string()
+  .optional()
+  .refine(
+    (v) => !v || /^(https?|socks5?):\/\/.+/.test(v),
+    { message: "must be empty or an http(s):// / socks5:// URL" },
+  );
+
 const EnvSchema = z.object({
   BEACON_BASE_URL: z.string().url().default("http://127.0.0.1:8080"),
   BEACON_ORG: z.string().min(1).default("default"),
   BEACON_TIMEOUT_MS: z.coerce.number().int().positive().default(30_000),
   BEACON_API_KEY: z.string().optional(),
+  /** Optional HTTP proxy used when talking to BEACON_BASE_URL. */
+  BEACON_PROXY: ProxyUrl,
   MCP_HTTP_HOST: z.string().default("127.0.0.1"),
   MCP_HTTP_PORT: z.coerce.number().int().positive().default(8765),
 });
@@ -70,6 +84,7 @@ Environment:
   BEACON_ORG            Default organization ID     (default: default)
   BEACON_TIMEOUT_MS     Request timeout in ms       (default: 30000)
   BEACON_API_KEY        Optional bearer token
+  BEACON_PROXY          Optional proxy for beacon requests  (e.g. http://corp:8080)
   MCP_HTTP_HOST         HTTP host                   (default: 127.0.0.1)
   MCP_HTTP_PORT         HTTP port                   (default: 8765)
 `);
