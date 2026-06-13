@@ -1,0 +1,23 @@
+# Source files - we ship compiled dist/ instead
+src/
+tests/
+
+# Dev tooling
+vitest.config.ts
+tsconfig.json
+.env.example
+.gitignore
+.github/
+
+# Build artefacts (interim)
+*.tsbuildinfo
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.log
+
+# Coverage
+coverage/
+.vitest/
