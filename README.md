@@ -4,7 +4,7 @@ MCP server for the [beacon](https://github.com/HyperBDR/beacon) log analytics pl
 
 Exposes beacon's REST API as [Model Context Protocol](https://modelcontextprotocol.io) tools and resources, so any MCP-compatible AI agent (Claude Desktop, Cursor, Cline, Continue, VS Code) can query and analyse AI-assistant usage data through a typed, validated interface.
 
-The MCP server is a thin client over beacon's existing `/api/v1` endpoints — it does **not** duplicate SQL, Parquet, or storage logic. The beacon Go backend is not modified.
+The MCP server is a thin client over beacon's existing `/api/v1` endpoints — it does **not** duplicate SQL, Parquet, or storage logic. It can run standalone, or be launched lazily by the beacon Go API and exposed through `/api/v1/mcp`.
 
 ---
 
@@ -16,7 +16,7 @@ The MCP server is a thin client over beacon's existing `/api/v1` endpoints — i
 - **Strict types & validation** via [Zod](https://zod.dev/) — every argument is checked at the protocol boundary.
 - **Unified filter arguments**: `org`, `from`, `to`, `project`, `model`, `user`, `status`.
 - **Smart summaries**: each tool returns a Markdown summary **plus** the raw JSON payload, so LLMs can both skim and re-parse.
-- **Zero beacon changes**: works against the public `/api/v1` API; auth via `BEACON_API_KEY` if you front beacon with a reverse proxy.
+- **API integration**: works against the public `/api/v1` API and can be proxied by the beacon Go backend at `/api/v1/mcp`; auth via `BEACON_API_KEY` if you front beacon with a reverse proxy.
 
 ---
 
